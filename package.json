@@ -1,0 +1,29 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "description": "A collection of agent skills with a zero-dependency npx installer. Includes loop-prompt: turn a vague task into a ready-to-paste /loop prompt backed by a task ledger file.",
+  "type": "module",
+  "bin": {
+    "skills": "bin/install.mjs"
+  },
+  "files": [
+    "bin",
+    "loop-prompt",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DotNet-MoYu/skills.git"
+  },
+  "keywords": [
+    "claude-code",
+    "agent",
+    "skill",
+    "loop",
+    "prompt"
+  ],
+  "license": "MIT"
+}

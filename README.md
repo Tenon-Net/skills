@@ -8,24 +8,24 @@ A collection of agent skills with a zero-dependency `npx` installer.
 
 ```bash
 # See which skills the repo has
-npx github:DotNet-MoYu/skills --list
+npx github:Tenon-Net/skills --list
 
 # Install just one (recommended)
-npx github:DotNet-MoYu/skills loop-prompt
+npx github:Tenon-Net/skills loop-prompt
 
 # Install several
-npx github:DotNet-MoYu/skills loop-prompt another-skill
+npx github:Tenon-Net/skills loop-prompt another-skill
 
 # No name = install all
-npx github:DotNet-MoYu/skills
+npx github:Tenon-Net/skills
 ```
 
 Install location (combine with any of the above):
 
 ```bash
-npx github:DotNet-MoYu/skills loop-prompt              # global: ~/.claude/skills
-npx github:DotNet-MoYu/skills loop-prompt --project    # this project only: ./.claude/skills
-npx github:DotNet-MoYu/skills loop-prompt --dir <path> # any directory / other agent
+npx github:Tenon-Net/skills loop-prompt              # global: ~/.claude/skills
+npx github:Tenon-Net/skills loop-prompt --project    # this project only: ./.claude/skills
+npx github:Tenon-Net/skills loop-prompt --dir <path> # any directory / other agent
 ```
 
 After installing, **restart Claude Code** and use `/loop-prompt`.
@@ -33,8 +33,8 @@ After installing, **restart Claude Code** and use `/loop-prompt`.
 ## Update / pin a version
 
 ```bash
-npx github:DotNet-MoYu/skills            # re-run = upgrade to latest
-npx github:DotNet-MoYu/skills#v0.2.0     # pin to a tagged version
+npx github:Tenon-Net/skills            # re-run = upgrade to latest
+npx github:Tenon-Net/skills#v0.2.0     # pin to a tagged version
 ```
 
 The installer overwrites the same-named skill folder, so re-running is safe.
@@ -67,24 +67,24 @@ MIT
 
 ```bash
 # 先看仓库里有哪些 skill
-npx github:DotNet-MoYu/skills --list
+npx github:Tenon-Net/skills --list
 
 # 只装指定的一个（推荐）
-npx github:DotNet-MoYu/skills loop-prompt
+npx github:Tenon-Net/skills loop-prompt
 
 # 装多个
-npx github:DotNet-MoYu/skills loop-prompt another-skill
+npx github:Tenon-Net/skills loop-prompt another-skill
 
 # 不带名字 = 全装
-npx github:DotNet-MoYu/skills
+npx github:Tenon-Net/skills
 ```
 
 安装位置（可与上面任意组合）：
 
 ```bash
-npx github:DotNet-MoYu/skills loop-prompt              # 全局：~/.claude/skills
-npx github:DotNet-MoYu/skills loop-prompt --project    # 仅当前项目：./.claude/skills
-npx github:DotNet-MoYu/skills loop-prompt --dir <path> # 任意目录 / 别的 agent
+npx github:Tenon-Net/skills loop-prompt              # 全局：~/.claude/skills
+npx github:Tenon-Net/skills loop-prompt --project    # 仅当前项目：./.claude/skills
+npx github:Tenon-Net/skills loop-prompt --dir <path> # 任意目录 / 别的 agent
 ```
 
 装完**重启 Claude Code**，即可用 `/loop-prompt`。
@@ -92,8 +92,8 @@ npx github:DotNet-MoYu/skills loop-prompt --dir <path> # 任意目录 / 别的 a
 ## 更新 / 固定版本
 
 ```bash
-npx github:DotNet-MoYu/skills            # 重新跑 = 升级到最新
-npx github:DotNet-MoYu/skills#v0.2.0     # 固定到某个 tag 版本
+npx github:Tenon-Net/skills            # 重新跑 = 升级到最新
+npx github:Tenon-Net/skills#v0.2.0     # 固定到某个 tag 版本
 ```
 
 安装器会覆盖同名 skill 目录，重复运行是安全的。

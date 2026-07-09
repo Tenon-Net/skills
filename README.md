@@ -1,5 +1,66 @@
 # skills
 
+**English** | [中文](#中文)
+
+A collection of agent skills with a zero-dependency `npx` installer.
+
+## Install
+
+```bash
+# See which skills the repo has
+npx github:DotNet-MoYu/skills --list
+
+# Install just one (recommended)
+npx github:DotNet-MoYu/skills loop-prompt
+
+# Install several
+npx github:DotNet-MoYu/skills loop-prompt another-skill
+
+# No name = install all
+npx github:DotNet-MoYu/skills
+```
+
+Install location (combine with any of the above):
+
+```bash
+npx github:DotNet-MoYu/skills loop-prompt              # global: ~/.claude/skills
+npx github:DotNet-MoYu/skills loop-prompt --project    # this project only: ./.claude/skills
+npx github:DotNet-MoYu/skills loop-prompt --dir <path> # any directory / other agent
+```
+
+After installing, **restart Claude Code** and use `/loop-prompt`.
+
+## Update / pin a version
+
+```bash
+npx github:DotNet-MoYu/skills            # re-run = upgrade to latest
+npx github:DotNet-MoYu/skills#v0.2.0     # pin to a tagged version
+```
+
+The installer overwrites the same-named skill folder, so re-running is safe.
+
+## Included skills
+
+| Skill | What it does |
+|-------|--------------|
+| `loop-prompt` | Turns a vague sentence into a ready-to-paste `/loop` prompt. It analyzes, asks questions, plans, and outputs a loop prompt backed by a task-ledger file — each round writes its task to `.loop/<slug>.md`, so nothing is lost on interruption and the loop stops itself. |
+
+> Note: `loop-prompt` relies on Claude Code's built-in `/loop` command; agents without `/loop` can't run the skill itself (but the installer and repo layout are agent-agnostic).
+
+## Adding a new skill
+
+Create `<skill-name>/SKILL.md` at the repo root. The installer auto-scans and installs every top-level folder containing a `SKILL.md` — no script changes needed.
+
+## License
+
+MIT
+
+---
+
+# 中文
+
+[English](#skills) | **中文**
+
 一组 agent skill，附带一个零依赖的 `npx` 安装器。
 
 ## 安装

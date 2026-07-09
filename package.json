@@ -1,6 +1,6 @@
 {
   "name": "skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A collection of agent skills with a zero-dependency npx installer. Includes loop-prompt: turn a vague task into a ready-to-paste /loop prompt backed by a task ledger file.",
   "type": "module",
   "bin": {

@@ -1,48 +1,78 @@
 #!/usr/bin/env node
-// Zero-dependency installer: copies every `<name>/SKILL.md` folder in this package
-// into an agent's skills directory. Re-running it upgrades in place (overwrite).
+// Zero-dependency installer: copies selected `<name>/SKILL.md` folders in this
+// package into an agent's skills directory. Re-running upgrades in place (overwrite).
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const pkgRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const args = process.argv.slice(2);
+const argv = process.argv.slice(2);
 
-if (args.includes('-h') || args.includes('--help')) {
+// A skill = a top-level folder here that contains a SKILL.md.
+const available = fs.readdirSync(pkgRoot, { withFileTypes: true })
+  .filter((e) => e.isDirectory() && fs.existsSync(path.join(pkgRoot, e.name, 'SKILL.md')))
+  .map((e) => e.name);
+
+if (argv.includes('-h') || argv.includes('--help')) {
   console.log(`Install agent skills.
 
 Usage:
-  npx github:DotNet-MoYu/skills            install globally (~/.claude/skills)
-  npx github:DotNet-MoYu/skills --project  install into ./.claude/skills
-  npx github:DotNet-MoYu/skills --dir DIR  install into DIR (any agent)
+  npx github:DotNet-MoYu/skills [names...] [--project | --dir DIR]
+
+  (no names)        install ALL skills
+  <name> [name...]  install only the named skill(s)
+  --list            list available skills, install nothing
+  --project         install into ./.claude/skills
+  --dir DIR         install into DIR (any location / other agent)
+
+Examples:
+  npx github:DotNet-MoYu/skills --list
+  npx github:DotNet-MoYu/skills loop-prompt
+  npx github:DotNet-MoYu/skills loop-prompt --project
 `);
   process.exit(0);
 }
 
-// Resolve target skills directory.
-const dirIdx = args.indexOf('--dir');
-const target = dirIdx !== -1 && args[dirIdx + 1]
-  ? path.resolve(args[dirIdx + 1])
-  : args.includes('--project')
-    ? path.resolve(process.cwd(), '.claude', 'skills')
-    : path.join(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude'), 'skills');
+if (argv.includes('--list')) {
+  console.log(`Available skills (${available.length}):`);
+  for (const n of available) console.log(`  ${n}`);
+  console.log(`\nInstall one:  npx github:DotNet-MoYu/skills <name>`);
+  process.exit(0);
+}
 
-// A skill = a top-level folder here that contains a SKILL.md.
-const skills = fs.readdirSync(pkgRoot, { withFileTypes: true })
-  .filter((e) => e.isDirectory() && fs.existsSync(path.join(pkgRoot, e.name, 'SKILL.md')))
-  .map((e) => e.name);
+// Parse flags; every non-flag arg is a requested skill name.
+let target = null;
+const names = [];
+for (let i = 0; i < argv.length; i++) {
+  const a = argv[i];
+  if (a === '--dir') target = path.resolve(argv[++i] ?? '');
+  else if (a === '--project') target = path.resolve(process.cwd(), '.claude', 'skills');
+  else if (a.startsWith('-')) continue; // ignore unknown flags
+  else names.push(a);
+}
+if (!target) {
+  target = path.join(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude'), 'skills');
+}
 
-if (skills.length === 0) {
+const unknown = names.filter((n) => !available.includes(n));
+if (unknown.length) {
+  console.error(`Unknown skill(s): ${unknown.join(', ')}`);
+  console.error(`Available: ${available.join(', ') || '(none)'}`);
+  process.exit(1);
+}
+
+const toInstall = names.length ? names : available;
+if (toInstall.length === 0) {
   console.error('No skills found (no <name>/SKILL.md in this package).');
   process.exit(1);
 }
 
 fs.mkdirSync(target, { recursive: true });
-for (const name of skills) {
+for (const name of toInstall) {
   const dest = path.join(target, name);
   fs.cpSync(path.join(pkgRoot, name), dest, { recursive: true });
   console.log(`✓ installed ${name} -> ${dest}`);
 }
 
-console.log(`\nDone (${skills.length}). Restart Claude Code, then use /${skills[0]}.`);
+console.log(`\nDone (${toInstall.length}). Restart Claude Code, then use /${toInstall[0]}.`);

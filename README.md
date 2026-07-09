@@ -5,14 +5,25 @@
 ## 安装
 
 ```bash
-# 全局安装（装到 ~/.claude/skills，所有项目可用）
+# 先看仓库里有哪些 skill
+npx github:DotNet-MoYu/skills --list
+
+# 只装指定的一个（推荐）
+npx github:DotNet-MoYu/skills loop-prompt
+
+# 装多个
+npx github:DotNet-MoYu/skills loop-prompt another-skill
+
+# 不带名字 = 全装
 npx github:DotNet-MoYu/skills
+```
 
-# 只装进当前项目（./.claude/skills）
-npx github:DotNet-MoYu/skills --project
+安装位置（可与上面任意组合）：
 
-# 装到任意目录（给别的 agent / 自定义位置）
-npx github:DotNet-MoYu/skills --dir <path>
+```bash
+npx github:DotNet-MoYu/skills loop-prompt              # 全局：~/.claude/skills
+npx github:DotNet-MoYu/skills loop-prompt --project    # 仅当前项目：./.claude/skills
+npx github:DotNet-MoYu/skills loop-prompt --dir <path> # 任意目录 / 别的 agent
 ```
 
 装完**重启 Claude Code**，即可用 `/loop-prompt`。

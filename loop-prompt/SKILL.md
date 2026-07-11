@@ -1,6 +1,6 @@
 ---
 name: loop-prompt
-description: Turn a vague, half-formed task into a ready-to-paste /loop prompt. Analyzes the request, asks a few clarifying questions, plans how to slice the work into rounds, and outputs a stateful, ledger-backed loop prompt that records each round's task to a file so nothing is lost if the loop is interrupted. Use when the user says "write me a loop prompt", "帮我写个 loop 提示词", "帮我想个 loop 提示词", or has a fuzzy task they want to run repeatedly via /loop but doesn't know how to phrase it.
+description: Turn a vague, half-formed task into a ready-to-paste, resumable /loop prompt. Use when the user says "write me a loop prompt", "帮我写个 loop 提示词", "帮我想个 loop 提示词", or has a fuzzy task they want to run repeatedly via /loop but doesn't know how to phrase it.
 argument-hint: "<vague task description>"
 ---
 
@@ -53,15 +53,14 @@ the cross-round memory channel. One file does both jobs.
    - how the work decomposes into rounds (the task list),
    - the per-round unit of work,
    - a **concrete done-condition**,
-   - a **max-round cap** `N` (a safety backstop — pick a number comfortably above the
-     expected round count; e.g. tasks×2, min 5).
+   - a **max-round cap** `N` — a hard backstop enforced from the ledger counter, so it works
+     in both interval and self-paced modes (the guard lives in the prompt, not the harness).
+     Pick a number comfortably above the expected round count; e.g. tasks×2, min 5.
 
 4. **Emit the loop prompt** in a fenced code block, filled in from the template below.
    **Mirror the user's language** (if they wrote Chinese, generate a Chinese prompt).
    Then add one line telling them how to run it:
    > 运行方式：`/loop 10m <粘贴上面的提示词>`（固定间隔），或省略间隔 `/loop <提示词>` 让它自己控制节奏。
-
-Do not run anything. Hand back the text.
 
 ## The prompt template
 
@@ -108,34 +107,13 @@ Each round:
 Never rely on memory of previous rounds — the ledger is the only source of truth.
 ````
 
-## Ledger file format
-
-`.loop/{slug}.md`, project-relative so it's visible and survives restarts. Suggest the user
-add `.loop/` to `.gitignore` (it's operational state, one file per task).
-
-```
-# Goal: <goal>
-Done-condition: <checkable signal>
-round: <n> / max: <N>
-
-## Tasks
-- [x] done task
-- [ ] pending task
-
-## Round log
-### Round 1 — <what happened> → <result>. NEXT: <next step>
-### Round 2 — ...
-```
-
 ## Guidelines
 
-- The generated prompt must be **fully self-contained** — never "continue from before".
 - The **done-condition must be concrete and checkable** ("all tests in `pytest` pass", "no
   files left in `todo/`"), not vague ("the code is good").
-- The **max-round cap is a hard backstop enforced from the ledger counter** — it works in
-  both interval and self-paced modes because the guard lives in the prompt, not in the
-  harness.
-- One ledger file per task. Reuse the same slug to resume; use a new slug for a new job.
+- One ledger file per task, `.loop/{slug}.md` — project-relative so it survives restarts.
+  Reuse the same slug to resume; use a new slug for a new job. Suggest the user add
+  `.loop/` to `.gitignore` (operational state).
 - Keep the generated prompt tight. It's re-sent every round, so every extra line is paid
   for repeatedly.
 
@@ -148,29 +126,18 @@ round: <n> / max: <N>
 
 **Answers:** 只 `src/` 及子目录、一轮一个文件、grep 为空即完成。
 
-**You output:**
+**You output** the template above with the placeholders filled and each step specialized —
+same preamble and same 6-step body, only these specifics change:
 
 ````
-You are running inside `/loop`. The same prompt re-runs each round with fresh context, so
-ALL state lives in the ledger file `.loop/strip-console-log.md`. Do exactly one round, then stop.
-
 GOAL: 删除 src/ 及子目录下所有 console.log 调用。
 DONE-CONDITION: `grep -rn "console.log" src/` 无任何输出。
+slug: strip-console-log · max: 20
 
-Each round:
-1. Read `.loop/strip-console-log.md`. If missing, create it (round 0 / max: 20), and
-   populate `## Tasks` by running `grep -rl "console.log" src/` — one checkbox per file.
-2. GUARD: if `grep -rn "console.log" src/` is empty OR `round >= max`, announce
-   "✅ DONE — no console.log left in src/", do nothing more, and stop (tell the user they
-   can `/loop cancel`).
-3. Otherwise pick the first unchecked file.
-4. Remove its console.log lines (leave console.error/warn). Save.
-5. Update the ledger: check off that file, append
-   `### Round {n} — cleaned <file> (<k> removed). NEXT: <next file or "verify grep">`,
-   increment round.
-6. Stop this round.
-
-Never rely on memory of previous rounds — the ledger is the only source of truth.
+- Step 1 create: populate `## Tasks` via `grep -rl "console.log" src/` — one checkbox per file.
+- Step 2 GUARD: done when `grep -rn "console.log" src/` is empty.
+- Step 4 work: remove console.log lines from the first unchecked file, leave console.error/warn, save.
+- Step 5 log: `### Round {n} — cleaned <file> (<k> removed). NEXT: <next file or "verify grep">`.
 ````
 
 > 运行方式：`/loop 2m <粘贴上面的提示词>`，或省略间隔让它自己控制节奏。

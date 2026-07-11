@@ -1,6 +1,6 @@
 ---
 name: ship
-description: One-command delivery pipeline — chains grill-with-docs (optional) → to-spec → implement (TDD) → code-review main, carrying one task description end-to-end. Use when the user types /ship <task> or asks to run the whole spec-to-review flow without typing each command.
+description: One-command delivery pipeline — chains an optional grilling pass → to-spec → implement (TDD) → code-review main, carrying one task description end-to-end. Use when the user types /ship <task> or asks to run the whole spec-to-review flow without typing each command.
 disable-model-invocation: true
 ---
 
@@ -13,10 +13,13 @@ Run the full delivery pipeline for the task given in the `/ship` arguments, in o
 ### 0. Branch guard — before anything
 Run `git status --short --branch`. Phase 4 diffs against `main`, so work must live on another branch. If on `main`, stop and offer to create `feat/<slug>` first.
 
-### 1. Align — grill-with-docs (conditional)
+### 1. Align — a grilling pass (conditional; pick the lightest rung that fits)
 Judge the task honestly:
-- **Fuzzy / large / design-open** → invoke `grill-with-docs` to sharpen it and capture ADRs + glossary along the way.
-- **Small / well-understood / one obvious implementation** → skip it, and say in one line why. Don't ceremony a one-liner.
+- **Small / well-understood / one obvious implementation** → skip. Say in one line why. Don't ceremony a one-liner.
+- **Fuzzy or design-open** → invoke `grill-me` (pure interview, no doc artifacts) to sharpen it. This is the default grill.
+- **…and it introduces new domain vocabulary or an architectural decision worth keeping** → invoke `grill-with-docs` instead, so the ADRs + glossary get captured as you go.
+
+Default to `grill-me`; only reach for `grill-with-docs` when the docs are genuinely worth persisting. If the user named a grilling skill, use that one.
 
 ### 2. Spec — to-spec
 Invoke `to-spec` to synthesize the discussion into a spec and publish it to the issue tracker (a GitHub issue, per `docs/agents/issue-tracker.md`).

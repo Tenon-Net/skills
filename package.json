@@ -1,6 +1,6 @@
 {
   "name": "skills",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A collection of agent skills with a zero-dependency npx installer. Includes loop-prompt (turn a vague task into a ready-to-paste /loop prompt) and ship (one-command spec-to-review delivery pipeline).",
   "type": "module",
   "bin": {

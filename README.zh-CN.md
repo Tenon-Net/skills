@@ -6,38 +6,39 @@
 
 ## 安装
 
-```bash
-# 先看仓库里有哪些 skill
-npx github:Tenon-Net/skills --list
-
-# 只装指定的一个（推荐）
-npx github:Tenon-Net/skills loop-prompt
-
-# 装多个
-npx github:Tenon-Net/skills loop-prompt another-skill
-
-# 不带名字 = 全装
-npx github:Tenon-Net/skills
-```
-
-安装位置（可与上面任意组合）：
+**推荐 —— 交互式选择器**（Vercel Labs 的 [`skills`](https://skills.sh) CLI）：
 
 ```bash
-npx github:Tenon-Net/skills loop-prompt              # 全局：~/.claude/skills
-npx github:Tenon-Net/skills loop-prompt --project    # 仅当前项目：./.claude/skills
-npx github:Tenon-Net/skills loop-prompt --dir <path> # 任意目录 / 别的 agent
+# 勾选要装哪些 skill + 装到哪个 agent（Claude Code / Cursor / Codex …）
+npx skills@latest add Tenon-Net/skills
+
+# …或直接装某一个（按 skill 名解析）
+npx skills@latest add Tenon-Net/skills/ship
 ```
 
-装完**重启 Claude Code**，即可用 `/loop-prompt`。
+`skills` CLI 对任意公开 GitHub 仓库都生效：它扫描本仓库的 `SKILL.md`，列出来让你挑，再装进你选的 agent。
+
+**零依赖后备** —— 仓库自带的安装器，离线或不想装外部 CLI 时用：
+
+```bash
+npx github:Tenon-Net/skills --list           # 只列出可用 skill，不安装
+npx github:Tenon-Net/skills ship             # 装指定的 skill
+npx github:Tenon-Net/skills                  # 不带名字 = 全装（无交互）
+npx github:Tenon-Net/skills ship --project   # 装到 ./.claude/skills（或 --dir <path>）
+```
+
+不带名字即全装；覆盖同名目录（重复运行安全）。默认装到 `~/.claude/skills`，用 `--project` / `--dir <path>` 改位置。
+
+装完**重启 Claude Code**，即可用如 `/ship`。
 
 ## 更新 / 固定版本
+
+两种安装器重新跑都会原地升级。要固定到某个 tag 版本，用后备安装器：
 
 ```bash
 npx github:Tenon-Net/skills            # 重新跑 = 升级到最新
 npx github:Tenon-Net/skills#v0.3.1     # 固定到某个 tag 版本
 ```
-
-安装器会覆盖同名 skill 目录，重复运行是安全的。
 
 ## 包含的 skill
 

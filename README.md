@@ -6,38 +6,40 @@ A collection of agent skills with a zero-dependency `npx` installer.
 
 ## Install
 
-```bash
-# See which skills the repo has
-npx github:Tenon-Net/skills --list
-
-# Install just one (recommended)
-npx github:Tenon-Net/skills loop-prompt
-
-# Install several
-npx github:Tenon-Net/skills loop-prompt another-skill
-
-# No name = install all
-npx github:Tenon-Net/skills
-```
-
-Install location (combine with any of the above):
+**Recommended — interactive picker** (the [`skills`](https://skills.sh) CLI by Vercel Labs):
 
 ```bash
-npx github:Tenon-Net/skills loop-prompt              # global: ~/.claude/skills
-npx github:Tenon-Net/skills loop-prompt --project    # this project only: ./.claude/skills
-npx github:Tenon-Net/skills loop-prompt --dir <path> # any directory / other agent
+# Pick which skills to install + which agent (Claude Code / Cursor / Codex …)
+npx skills@latest add Tenon-Net/skills
+
+# …or install one directly, resolved by skill name
+npx skills@latest add Tenon-Net/skills/ship
 ```
 
-After installing, **restart Claude Code** and use `/loop-prompt`.
+The `skills` CLI works on any public GitHub repo: it scans this repo's `SKILL.md` files,
+lists them so you can choose, and installs the selected ones into the agent you pick.
+
+**Zero-dependency fallback** — the repo's own installer, for offline use or when you'd rather not pull an external CLI:
+
+```bash
+npx github:Tenon-Net/skills --list           # list available skills, install nothing
+npx github:Tenon-Net/skills ship             # install the named skill(s)
+npx github:Tenon-Net/skills                  # no name = install ALL (no prompt)
+npx github:Tenon-Net/skills ship --project   # into ./.claude/skills (or --dir <path>)
+```
+
+No name installs everything; it overwrites the same-named folder (re-running is safe). Default location is `~/.claude/skills`; `--project` / `--dir <path>` change it.
+
+After installing, **restart Claude Code** and use e.g. `/ship`.
 
 ## Update / pin a version
+
+Re-running either installer upgrades in place. To pin a tagged version, use the fallback installer:
 
 ```bash
 npx github:Tenon-Net/skills            # re-run = upgrade to latest
 npx github:Tenon-Net/skills#v0.3.1     # pin to a tagged version
 ```
-
-The installer overwrites the same-named skill folder, so re-running is safe.
 
 ## Included skills
 

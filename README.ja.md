@@ -6,38 +6,39 @@
 
 ## インストール
 
-```bash
-# リポジトリにある skill を一覧表示
-npx github:Tenon-Net/skills --list
-
-# 1つだけインストール（推奨）
-npx github:Tenon-Net/skills loop-prompt
-
-# 複数インストール
-npx github:Tenon-Net/skills loop-prompt another-skill
-
-# 名前なし = すべてインストール
-npx github:Tenon-Net/skills
-```
-
-インストール先（上記のいずれとも組み合わせ可能）：
+**推奨 — インタラクティブなピッカー**（Vercel Labs の [`skills`](https://skills.sh) CLI）：
 
 ```bash
-npx github:Tenon-Net/skills loop-prompt              # グローバル：~/.claude/skills
-npx github:Tenon-Net/skills loop-prompt --project    # このプロジェクトのみ：./.claude/skills
-npx github:Tenon-Net/skills loop-prompt --dir <path> # 任意のディレクトリ / 他の agent
+# インストールする skill と対象 agent（Claude Code / Cursor / Codex …）を選択
+npx skills@latest add Tenon-Net/skills
+
+# …または 1つを直接インストール（skill 名で解決）
+npx skills@latest add Tenon-Net/skills/ship
 ```
 
-インストール後は **Claude Code を再起動** し、`/loop-prompt` を使います。
+`skills` CLI は任意の公開 GitHub リポジトリで動作します：本リポジトリの `SKILL.md` をスキャンし、一覧から選ばせ、選んだ agent へインストールします。
+
+**ゼロ依存フォールバック** — リポジトリ同梱のインストーラー。オフライン時や外部 CLI を入れたくない場合に：
+
+```bash
+npx github:Tenon-Net/skills --list           # 利用可能な skill を一覧表示（インストールしない）
+npx github:Tenon-Net/skills ship             # 指定した skill をインストール
+npx github:Tenon-Net/skills                  # 名前なし = すべてインストール（非対話）
+npx github:Tenon-Net/skills ship --project   # ./.claude/skills へ（または --dir <path>）
+```
+
+名前なしですべてインストールし、同名フォルダを上書きします（再実行は安全）。既定のインストール先は `~/.claude/skills`。`--project` / `--dir <path>` で変更できます。
+
+インストール後は **Claude Code を再起動** し、例えば `/ship` を使います。
 
 ## 更新 / バージョン固定
+
+どちらのインストーラーも再実行すればその場で更新されます。タグ付きバージョンに固定するにはフォールバックのインストーラーを使います：
 
 ```bash
 npx github:Tenon-Net/skills            # 再実行 = 最新へアップグレード
 npx github:Tenon-Net/skills#v0.3.1     # タグ付きバージョンに固定
 ```
-
-インストーラーは同名の skill フォルダを上書きするため、再実行しても安全です。
 
 ## 含まれる skill
 

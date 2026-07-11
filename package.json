@@ -10,7 +10,9 @@
     "bin",
     "loop-prompt",
     "ship",
-    "README.md"
+    "README.md",
+    "README.zh-CN.md",
+    "README.ja.md"
   ],
   "engines": {
     "node": ">=18"

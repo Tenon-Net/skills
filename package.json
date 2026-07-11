@@ -1,7 +1,7 @@
 {
   "name": "skills",
-  "version": "0.2.0",
-  "description": "A collection of agent skills with a zero-dependency npx installer. Includes loop-prompt: turn a vague task into a ready-to-paste /loop prompt backed by a task ledger file.",
+  "version": "0.3.0",
+  "description": "A collection of agent skills with a zero-dependency npx installer. Includes loop-prompt (turn a vague task into a ready-to-paste /loop prompt) and ship (one-command spec-to-review delivery pipeline).",
   "type": "module",
   "bin": {
     "skills": "bin/install.mjs"
@@ -9,6 +9,7 @@
   "files": [
     "bin",
     "loop-prompt",
+    "ship",
     "README.md"
   ],
   "engines": {

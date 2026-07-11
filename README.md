@@ -44,8 +44,11 @@ The installer overwrites the same-named skill folder, so re-running is safe.
 | Skill | What it does |
 |-------|--------------|
 | `loop-prompt` | Turns a vague sentence into a ready-to-paste `/loop` prompt. It analyzes, asks questions, plans, and outputs a loop prompt backed by a task-ledger file — each round writes its task to `.loop/<slug>.md`, so nothing is lost on interruption and the loop stops itself. |
+| `ship` | One-command delivery pipeline: `/ship <task>` chains **grill-with-docs** (optional) → **to-spec** → **implement** (TDD) → **code-review main**, carrying one task description end-to-end so you don't type each command. Guards against working on `main`, stops for a human "go" on the spec (skip with `--yolo`). |
 
 > Note: `loop-prompt` relies on Claude Code's built-in `/loop` command; agents without `/loop` can't run the skill itself (but the installer and repo layout are agent-agnostic).
+>
+> Note: `ship` is only an orchestrator — it invokes the `grill-with-docs`, `to-spec`, `implement`, and `code-review` skills (Matt Pocock's engineering skills, set up via `/setup-matt-pocock-skills`), which are **not** in this repo. Install those first, or `/ship` has nothing to chain.
 
 ## Adding a new skill
 
@@ -103,8 +106,11 @@ npx github:Tenon-Net/skills#v0.2.0     # 固定到某个 tag 版本
 | Skill | 作用 |
 |-------|------|
 | `loop-prompt` | 把一句模糊的话变成可直接粘进 `/loop` 的提示词。它会分析、提问、规划，产出一个带「任务台账文件」的循环提示词——每轮把任务写进 `.loop/<slug>.md`，中断也不丢、能自动收尾。 |
+| `ship` | 一条命令跑完整条交付链：`/ship <任务>` 依次串起 **grill-with-docs**（可选）→ **to-spec** → **implement**（TDD）→ **code-review main**，任务描述贯穿全程,不用逐条打命令。会拦住在 `main` 上直接干活,并在 spec 阶段停下等你确认(`--yolo` 可跳过)。 |
 
 > 注：`loop-prompt` 依赖 Claude Code 专属的 `/loop` 命令，其它没有 `/loop` 的 agent 用不了这个 skill 本身（但安装器和仓库结构是通用的）。
+>
+> 注：`ship` 只是编排器,它调用 `grill-with-docs`、`to-spec`、`implement`、`code-review` 四个 skill(Matt Pocock 的工程 skill,用 `/setup-matt-pocock-skills` 安装),这些**不在**本仓库。先装好它们,否则 `/ship` 没东西可串。
 
 ## 加新 skill
 
